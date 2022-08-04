@@ -38,7 +38,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     node_count             = null
     max_pods               = 100
     orchestrator_version   = "1.22.11"
-    enable_host_encryption = true
+    enable_host_encryption = false
     zones                  = ["1", "2", "3"]
 
     node_labels = {
@@ -64,10 +64,6 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     service_cidr       = "10.2.0.0/16"
     outbound_type      = "loadBalancer"
     load_balancer_sku  = "standard"
-  }
-
-  http_proxy_config {
-    no_proxy = azurerm_subnet.subnet.address_prefixes
   }
 
   identity {
