@@ -9,8 +9,8 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = var.AUTH.SUBSCRIPTION_ID
-  client_id       = var.AUTH.CLIENT_ID
-  client_secret   = var.AUTH.CLIENT_SECRET
-  tenant_id       = var.AUTH.TENANT_ID
+  subscription_id = var.auth.subscription_id
+  client_id       = var.auth.client_id
+  client_secret   = var.auth.client_secret
+  tenant_id       = var.auth.tenant_id
 }
