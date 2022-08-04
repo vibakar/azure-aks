@@ -25,7 +25,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   kubernetes_version  = "1.22.11"
 
   default_node_pool {
-    name                   = "default"
+    name                   = "system"
     vnet_subnet_id         = azurerm_subnet.subnet.id
     os_sku                 = "Ubuntu"
     os_disk_type           = "Managed"
@@ -34,7 +34,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     vm_size                = "Standard_B2s"
     enable_auto_scaling    = true
     max_count              = 3
-    min_count              = 2
+    min_count              = 1
     node_count             = null
     max_pods               = 100
     orchestrator_version   = "1.22.11"
@@ -42,10 +42,12 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     zones                  = ["1", "2", "3"]
 
     node_labels = {
-      size = "small"
+      size = "small",
+      type = "system"
     }
+
     tags = {
-      name = "default_nodes"
+      name = "system_nodes"
     }
   }
 
@@ -71,7 +73,34 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   }
 
   tags = {
-    Environment = "dev/test"
+    cluster = "dev"
+  }
+}
+
+resource "azurerm_kubernetes_cluster_node_pool" "np" {
+  name                   = "app"
+  kubernetes_cluster_id  = azurerm_kubernetes_cluster.cluster.id
+  vnet_subnet_id         = azurerm_subnet.subnet.id
+  os_sku                 = "Ubuntu"
+  os_disk_type           = "Managed"
+  os_disk_size_gb        = 30
+  vm_size                = "Standard_B2s"
+  enable_auto_scaling    = true
+  max_count              = 3
+  min_count              = 1
+  node_count             = null
+  max_pods               = 100
+  orchestrator_version   = "1.22.11"
+  enable_host_encryption = false
+  zones                  = ["1", "2", "3"]
+
+  node_labels = {
+    size = "small",
+    type = "apps"
+  }
+
+  tags = {
+    name = "app_nodes"
   }
 }
 
